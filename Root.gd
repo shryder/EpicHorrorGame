@@ -39,7 +39,7 @@ func _server_created():
 		position = map_info.spawn_points[get_rand_range(0, map_info.spawn_points.size())]
 	};
 	
-	var map_node = load("res://" + map_info.name + ".tscn").instance();
+	var map_node = load("res://Maps/" + map_info.name + ".tscn").instance();
 	map_node.set_name("World");
 	$'/root/Root'.add_child(map_node);
 	
@@ -59,7 +59,7 @@ func _connected_fail():
 	print("Failed to connect to server.");
 
 func _server_disconnected():
-	print("Lost connection to server.");
+	get_tree().change_scene("res://Scenes/GUI/MainMenu.tscn");
 
 func _process(delta):
 	$IngameHUD/FPSCounter.text = "FPS: " + str(Engine.get_frames_per_second());
@@ -75,7 +75,7 @@ func _process(delta):
 
 func create_player_node(client_id, position, add_to_world=false, is_self=false):
 	print("CREATING CLIENT_ID'S PLAYER NODE =====> ", client_id);
-	var player_node = preload("res://Player.tscn").instance();
+	var player_node = preload("res://Player/Player.tscn").instance();
 	player_node.set_name(str(client_id));
 	player_node.set_network_master(client_id);
 	player_node.translate(position);
@@ -95,7 +95,7 @@ func add_player_to_world(node):
 remote func init_game(packet):
 	players = packet.players;
 
-	var map_node = load("res://" + packet.map.name + ".tscn").instance();
+	var map_node = load("res://Maps/" + packet.map.name + ".tscn").instance();
 	map_node.set_name('World');
 
 	# Insert Map Node
@@ -165,10 +165,10 @@ func toggleEscMenu():
 
 		# Load and insert the Esc Scene if not available
 		if(!(EscMenu.node is Node)):
-			var menu_node = preload("res://EscMenu.tscn").instance();
+			var menu_node = preload("res://Scenes/GUI/EscMenu.tscn").instance();
 			menu_node.set_name('EscMenu');
 			get_node('/root/Root').add_child(menu_node);
-			EscMenu.node = $EscMenu;
+			EscMenu.node = menu_node;
 
 		EscMenu.node.show();
 		EscMenu.enabled = true;

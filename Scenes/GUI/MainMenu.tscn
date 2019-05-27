@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/GUI/MainMenu.gd" type="Script" id=1]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -33,7 +33,6 @@ margin_top = 100.0
 margin_right = 440.0
 margin_bottom = 114.0
 text = "Display Name:"
-
 [connection signal="pressed" from="Create" to="." method="_on_Create_pressed"]
 [connection signal="pressed" from="Join" to="." method="_on_Join_pressed"]
 [connection signal="text_changed" from="DisplayName" to="." method="_on_UserDisplayName_text_changed"]

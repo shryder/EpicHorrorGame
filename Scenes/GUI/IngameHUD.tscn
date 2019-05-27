@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://IngameHUD.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/GUI/IngameHUD.gd" type="Script" id=1]
+
 
 [node name="IngameHUD" type="Control"]
 margin_right = 40.0
@@ -16,8 +17,8 @@ text = "FPS: 0"
 
 [node name="DisplayName" type="Label" parent="."]
 margin_left = 10.0
-margin_top = 580.0
+margin_top = 30.0
 margin_right = 117.0
-margin_bottom = 594.0
+margin_bottom = 44.0
 text = "Unknown Soldier"
 

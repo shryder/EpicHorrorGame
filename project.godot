@@ -16,13 +16,13 @@ _global_script_class_icons={
 [application]
 
 config/name="EpicHorrorGame"
-run/main_scene="res://MainMenu.tscn"
+run/main_scene="res://Scenes/GUI/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-PlayerInfo="*res://PlayerInfo.gd"
-Maps="*res://Maps.gd"
+PlayerInfo="*res://Singletons/PlayerInfo.gd"
+Maps="*res://Singletons/Maps.gd"
 
 [input]
 
