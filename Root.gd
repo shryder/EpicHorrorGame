@@ -26,24 +26,30 @@ func _ready():
 
 func _server_created():
 	print("Server created hello");
-	
+
 	# Pick a random map from maps list
 	var maps = $'/root/Maps'.maps;
 	map_info = maps[get_rand_range(0, maps.size())];
-	
+
 	print("Map ", map_info, " chosen.");
-	
+
 	players[1] = {
 		client_id = 1,
 		display_name = $'/root/PlayerInfo'.player.display_name,
 		position = map_info.spawn_points[get_rand_range(0, map_info.spawn_points.size())]
 	};
-	
+
 	var map_node = load("res://Maps/" + map_info.name + ".tscn").instance();
 	map_node.set_name("World");
-	$'/root/Root'.add_child(map_node);
 	
-	create_player_node(1, players[1].position, true, true);
+	var nametags_node = CanvasLayer.new();
+	nametags_node.set_name("Nametags");
+	
+	map_node.add_child(nametags_node);
+	
+	$'/root/Root'.add_child(map_node);
+
+	create_player_node(1, players[1].position, true);
 
 func _player_connected(id):
 	print("Player ", id, " connected.");
@@ -73,17 +79,20 @@ func _process(delta):
 	if(Input.is_action_just_pressed("fullscreen")):
 		OS.set_window_fullscreen(true);
 
-func create_player_node(client_id, position, add_to_world=false, is_self=false):
+func create_player_node(client_id, position, add_to_world=false):
 	print("CREATING CLIENT_ID'S PLAYER NODE =====> ", client_id);
+	
 	var player_node = preload("res://Player/Player.tscn").instance();
 	player_node.set_name(str(client_id));
 	player_node.set_network_master(client_id);
 	player_node.translate(position);
-
-	if not is_self:
-		# Delete camera node if player is NOT current player.
-		player_node.get_node('Head/Camera').queue_free();
-
+	
+	var nametag_node = Label.new();
+	nametag_node.set_name(str(client_id));
+	nametag_node.text = players[client_id].display_name;
+	
+	$'/root/Root/World/Nametags'.add_child(nametag_node);
+	
 	if add_to_world:
 		add_player_to_world(player_node);
 
@@ -94,23 +103,22 @@ func add_player_to_world(node):
 
 remote func init_game(packet):
 	players = packet.players;
-
+	
 	var map_node = load("res://Maps/" + packet.map.name + ".tscn").instance();
-	map_node.set_name('World');
-
-	# Insert Map Node
+	map_node.set_name("World");
+	
+	var nametags_node = CanvasLayer.new();
+	nametags_node.set_name("Nametags");
+	
+	map_node.add_child(nametags_node);
+	
 	$'/root/Root'.add_child(map_node);
 
 	print("Amount of players: ", players.size());
 
-	# Spawn all players (including own player) 
+	# Spawn all players (including own player)
 	for p in players:
-		# Check if current iteration is of own player
-		var is_own = false;
-		if p == get_tree().get_network_unique_id():
-			is_own = true;
-
-		create_player_node(p, players[p].position, true, is_own);
+		create_player_node(p, players[p].position, true);
 
 	rpc_id(1, "done_loading_game", packet.player.client_id);
 
@@ -122,7 +130,7 @@ sync func _spawn_player(client_id):
 remote func done_loading_game(client_id):
 	players[client_id].done_loading = true;
 	print(client_id, " done loading the game, finna notify everybody else.");
-	
+
 	# Spawn that one player on everybody else's screen.
 	for peer_id in players:
 		if(peer_id != client_id):

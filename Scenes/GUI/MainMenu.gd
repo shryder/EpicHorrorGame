@@ -26,3 +26,6 @@ func _on_Create_pressed():
 	get_tree().set_network_peer(peer);
 	get_tree().set_meta("network_peer", peer);
 	get_tree().change_scene("res://Root.tscn");
+
+func _on_ServersList_pressed():
+	get_tree().change_scene("res://Scenes/GUI/ServerList.tscn");
