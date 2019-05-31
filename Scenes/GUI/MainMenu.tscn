@@ -14,7 +14,7 @@ script = ExtResource( 1 )
 margin_left = 360.0
 margin_top = 144.0
 margin_right = 710.0
-margin_bottom = 360.0
+margin_bottom = 340.0
 
 [node name="DisplayNameLabel" type="Label" parent="Panel"]
 margin_left = 40.0
@@ -31,26 +31,34 @@ margin_bottom = 64.0
 
 [node name="Join" type="Button" parent="Panel"]
 margin_left = 110.0
-margin_top = 86.0
+margin_top = 116.0
 margin_right = 240.0
-margin_bottom = 116.0
-text = "JOIN"
-
-[node name="Create" type="Button" parent="Panel"]
-margin_left = 110.0
-margin_top = 126.0
-margin_right = 240.0
-margin_bottom = 156.0
-text = "CREATE"
+margin_bottom = 146.0
+text = "Direct Connect"
 
 [node name="ServersList" type="Button" parent="Panel"]
 margin_left = 110.0
-margin_top = 166.0
+margin_top = 156.0
 margin_right = 240.0
-margin_bottom = 196.0
+margin_bottom = 186.0
 text = "Servers List"
+
+[node name="ServerIP" type="LineEdit" parent="Panel"]
+margin_left = 40.0
+margin_top = 76.0
+margin_right = 230.0
+margin_bottom = 100.0
+text = "127.0.0.1"
+placeholder_text = "127.0.0.1"
+
+[node name="ServerPort" type="LineEdit" parent="Panel"]
+margin_left = 240.0
+margin_top = 76.0
+margin_right = 310.0
+margin_bottom = 100.0
+text = "1338"
+placeholder_text = "1338"
 
 [connection signal="text_changed" from="Panel/DisplayName" to="." method="_on_UserDisplayName_text_changed"]
 [connection signal="pressed" from="Panel/Join" to="." method="_on_Join_pressed"]
-[connection signal="pressed" from="Panel/Create" to="." method="_on_Create_pressed"]
 [connection signal="pressed" from="Panel/ServersList" to="." method="_on_ServersList_pressed"]

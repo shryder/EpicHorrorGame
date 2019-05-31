@@ -15,7 +15,7 @@ func _on_UserDisplayName_text_changed(new_text):
 
 func _on_Join_pressed():
 	var peer = NetworkedMultiplayerENet.new();
-	peer.create_client(SERVER_IP, SERVER_PORT);
+	peer.create_client($Panel/ServerIP.text, int($Panel/ServerPort.text));
 	get_tree().set_network_peer(peer);
 	get_tree().set_meta("network_peer", peer);
 	get_tree().change_scene("res://Root.tscn");

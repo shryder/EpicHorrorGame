@@ -22,7 +22,6 @@ config/icon="res://icon.png"
 [autoload]
 
 PlayerInfo="*res://Singletons/PlayerInfo.gd"
-Maps="*res://Singletons/Maps.gd"
 
 [input]
 

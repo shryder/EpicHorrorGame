@@ -18,12 +18,12 @@ func _ready():
 
 func _connected_to_server():
 	print("Successfully connected to server.");
-	
+
 	var s_packet = {
 		client_id = get_tree().get_network_unique_id(),
 		player = $'/root/PlayerInfo'.player
 	};
-	
+
 	rpc_id(1, "_register_player", s_packet);
 
 func _connection_failed():
@@ -33,11 +33,6 @@ func _server_disconnected():
 	get_tree().change_scene("res://Scenes/GUI/MainMenu.tscn");
 
 func _process(delta):
-	$IngameHUD/FPSCounter.text = "FPS: " + str(Engine.get_frames_per_second());
-
-	if(Input.is_action_just_pressed("ui_cancel")):
-		toggleEscMenu();
-
 	if(Input.is_action_just_pressed("restart")):
 		get_tree().reload_current_scene();
 
@@ -47,18 +42,18 @@ func _process(delta):
 # Spawn a player in current world
 func create_player_node(client_id, position, add_to_world=true):
 	print("CREATING CLIENT_ID'S PLAYER NODE =====> ", client_id);
-	
+
 	var player_node = preload("res://Player/Player.tscn").instance();
 	player_node.set_name(str(client_id));
 	player_node.set_network_master(client_id);
 	player_node.translate(position);
-	
+
 	var nametag_node = Label.new();
 	nametag_node.set_name(str(client_id));
 	nametag_node.text = players[client_id].display_name;
-	
+
 	$'/root/Root/World/Nametags'.add_child(nametag_node);
-	
+
 	if add_to_world:
 		add_player_to_world(player_node);
 
@@ -70,15 +65,15 @@ func add_player_to_world(node):
 # Initialize the game's world and other nodes
 remote func init_game(packet):
 	players = packet.players;
-	
+
 	var map_node = load("res://Maps/" + packet.map.name + ".tscn").instance();
 	map_node.set_name("World");
-	
+
 	var nametags_node = CanvasLayer.new();
 	nametags_node.set_name("Nametags");
-	
+
 	map_node.add_child(nametags_node);
-	
+
 	$'/root/Root'.add_child(map_node);
 
 	print("Amount of players: ", players.size());
@@ -93,7 +88,7 @@ remote func init_game(packet):
 remote func done_loading_game(client_id):
 	players[client_id].done_loading = true;
 	print(client_id, " done loading the game, finna notify everybody else.");
-	
+
 	# Because we already spawned our player before
 	# We check if this new player is us so we dont spawn again
 	if(client_id != get_tree().get_network_unique_id()):
@@ -102,15 +97,15 @@ remote func done_loading_game(client_id):
 # Successfully joined the server
 remote func _joined_server(r_packet):
 	players = r_packet.players;
-	
+
 	var map_node = load("res://Maps/" + r_packet.map.name + ".tscn").instance();
 	map_node.set_name("World");
-	
+
 	var nametags_node = CanvasLayer.new();
 	nametags_node.set_name("Nametags");
-	
+
 	map_node.add_child(nametags_node);
-	
+
 	$'/root/Root'.add_child(map_node);
 
 	# Spawn all players (including own player)
@@ -119,34 +114,15 @@ remote func _joined_server(r_packet):
 
 	rpc_id(1, "_done_loading_game", r_packet.player.client_id);
 
-# A new player just joined 
+# A new player just joined
 remote func register_player(player):
 	players[player.client_id] = player;
-	
+
 	print("Player with id ", player.client_id, " and named ", player.display_name, " added to list of players: ", players);
 
 remote func player_left(client_id):
 	print("Player ", players[client_id].display_name, " left the game.");
 	players.erase(client_id);
-	
+
 	# Delete player node
-	get_tree().get_node('/root/Root/World/Players/' + str(client_id)).free_queue();
-	
-func toggleEscMenu():
-	if (!EscMenu.enabled or !(EscMenu.node is Node)):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE);
-
-		# Load and insert the Esc Scene if not available
-		if(!(EscMenu.node is Node)):
-			var menu_node = preload("res://Scenes/GUI/EscMenu.tscn").instance();
-			menu_node.set_name('EscMenu');
-			get_node('/root/Root').add_child(menu_node);
-			EscMenu.node = menu_node;
-
-		EscMenu.node.show();
-		EscMenu.enabled = true;
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED);
-
-		EscMenu.node.hide();
-		EscMenu.enabled = false;
+	get_tree().get_root().get_node('/root/Root/World/Players/' + str(client_id)).queue_free();
