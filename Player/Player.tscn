@@ -10,7 +10,6 @@ radius = 0.5
 radius = 0.5
 
 [node name="Player" type="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.370275, 0.572866, 4.23202 )
 script = ExtResource( 1 )
 
 [node name="Body" type="CollisionShape" parent="."]
@@ -34,3 +33,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.318924, 0 )
 [node name="Tail" type="RayCast" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.156753, 0 )
 enabled = true
+

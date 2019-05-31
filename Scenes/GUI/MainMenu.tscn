@@ -49,6 +49,7 @@ margin_top = 166.0
 margin_right = 240.0
 margin_bottom = 196.0
 text = "Servers List"
+
 [connection signal="text_changed" from="Panel/DisplayName" to="." method="_on_UserDisplayName_text_changed"]
 [connection signal="pressed" from="Panel/Join" to="." method="_on_Join_pressed"]
 [connection signal="pressed" from="Panel/Create" to="." method="_on_Create_pressed"]

@@ -3,9 +3,13 @@ extends KinematicBody
 puppet var camera_angle = 0;
 var mouse_sensitivity = 0.3;
 
-puppet var velocity = Vector3();
-puppet var direction = Vector3();
-puppet var position = Transform();
+puppet var puppet_velocity = Vector3();
+puppet var puppet_direction = Vector3();
+puppet var puppet_position = Transform();
+
+var velocity = Vector3();
+var direction = Vector3();
+var on_floor = true;
 
 # Fly stuff
 const FLY_SPEED = 40;
@@ -22,7 +26,6 @@ const DEACCEL = 8;
 var jump_height = 10;
 var AIR_SPEED = 15;
 
-puppet var on_floor = true;
 
 func _ready():
 	$Head/Camera.current = false;
@@ -68,7 +71,7 @@ func walk(delta):
 
 		# Get where camera looking at
 		var aim = $Head.get_global_transform().basis;
-		
+
 		if Input.is_action_pressed("move_forward"):
 			direction -= aim.z;
 		if Input.is_action_pressed("move_backward"):
@@ -124,23 +127,29 @@ func walk(delta):
 
 		var nametag_node = get_node('/root/Root/World/Nametags/' + str(get_network_master()));
 		nametag_node.text = $'/root/PlayerInfo'.player.display_name;
+
+		var above_head = $Head/Camera.unproject_position(global_transform.origin);
+		above_head.y += 5;
+
+		nametag_node.set_position(above_head);
+
+		rset_unreliable("puppet_velocity", velocity);
+		rset_unreliable("puppet_position", global_transform);
+		rset_unreliable("puppet_direction", direction);
+	else:
+		move_and_slide(puppet_velocity, Vector3(0, 1, 0), 0.10);
+		global_transform = puppet_position;
+
+		var nametag_node = get_node('/root/Root/World/Nametags/' + str(get_network_master()))
+		nametag_node.text = $'/root/Root'.players[get_network_master()].display_name;
+
 		var above_head = $Head/Camera.unproject_position(global_transform.origin);
 		above_head.y += 5;
 		nametag_node.set_position(above_head);
 
-		rset_unreliable("velocity", velocity);
-		rset_unreliable("position", global_transform);
-	else:
-		move_and_slide(velocity, Vector3(0, 1, 0), 0.10);
-		global_transform = position;
-		
-		var nametag_node = get_node('/root/Root/World/Nametags/' + str(get_network_master()))
-		nametag_node.text = $'/root/Root'.players[get_network_master()].display_name;
-		var above_head = $Head/Camera.unproject_position(global_transform.origin);
-		above_head.y += 5;
-		nametag_node.set_position(above_head);
-		
+	if not is_network_master():
+		puppet_position = global_transform;
+
 func _physics_process(delta):
-	# walk(delta);
 	walk(delta);
 	pass
