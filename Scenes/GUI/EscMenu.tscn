@@ -48,7 +48,7 @@ margin_right = 241.0
 margin_bottom = 28.0
 text = "Player Name"
 align = 1
-valign = 1
+valign = 3
 
 [connection signal="pressed" from="Panel/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="pressed" from="Panel/BackToMainMenu" to="." method="_on_BackToMainMenu_pressed"]

@@ -135,7 +135,7 @@
 			"file": "/C/Users/SM/Desktop/game dev/Godot/MasterServer/app.js",
 			"settings":
 			{
-				"buffer_size": 3141,
+				"buffer_size": 3102,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "app.js"
@@ -463,6 +463,7 @@
 	},
 	"expanded_folders":
 	[
+		"/C/Users/SM/Desktop/game dev/Godot/EpicHorrorGame",
 		"/C/Users/SM/Desktop/game dev/Godot/MasterServer"
 	],
 	"file_history":
@@ -782,15 +783,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3141,
+						"buffer_size": 3102,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2610,
-								2610
+								2831,
+								2831
 							]
 						],
 						"settings":
@@ -800,7 +801,7 @@
 							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1368.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
